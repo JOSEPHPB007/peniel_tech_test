@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Member & Product</title>
+</head>
+<body>
+    <h2>Add Member</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ member_form.as_p }}
+        
+        <h2>Add Product</h2>
+        {{ product_form.as_p }}
+        
+        <button type="submit">Save</button>
+    </form>
+
+    <br>
+
+    <!-- Button to view the list of members & products -->
+    <a href="{% url 'list_item' %}">
+        <button>Show List</button>
+    </a>
+
+    <!-- Invoice button -->
+    <a href="{% url 'invoice' %}">
+        <button>Invoice</button>
+    </a>
+</body>
+</html>

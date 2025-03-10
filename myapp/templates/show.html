@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Member & Product List</title>
+</head>
+<body>
+    <h2>Members List</h2>
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Discount (%)</th>
+        </tr>
+        {% for member in members %}
+        <tr>
+            <td>{{ member.name }}</td>
+            <td>{{ member.discount }}%</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Products List</h2>
+    <table border="1">
+        <tr>
+            <th>Product Name</th>
+            <th>Price</th>
+        </tr>
+        {% for product in products %}
+        <tr>
+            <td>{{ product.productname }}</td>
+            <td>${{ product.price }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+    <a href="{% url 'create_item' %}">
+        <button>Add More</button>
+    </a>
+</body>
+</html>

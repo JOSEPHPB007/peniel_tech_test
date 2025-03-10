@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Invoice</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+    <h2>Generate Invoice</h2>
+
+    <!-- Dropdown for selecting Member -->
+    <label for="member">Select Member:</label>
+    <select id="member">
+        <option value="">-- Select Member --</option>
+        {% for member in members %}
+            <option value="{{ member.id }}">{{ member.name }} ({{ member.discount }}% Discount)</option>
+        {% endfor %}
+    </select>
+
+    <!-- Dropdown for selecting Product -->
+    <label for="product">Select Product:</label>
+    <select id="product">
+        <option value="">-- Select Product --</option>
+        {% for product in products %}
+            <option value="{{ product.id }}">{{ product.productname }} (${{ product.price }})</option>
+        {% endfor %}
+    </select>
+
+    <br><br>
+
+    <!-- Table to display invoice details -->
+    <table border="1" id="invoice-table" style="display: none;">
+        <tr>
+            <th>Product Name</th>
+            <th>Original Price</th>
+            <th>Discount (%)</th>
+            <th>Final Price</th>
+        </tr>
+        <tr>
+            <td id="product-name"></td>
+            <td id="original-price"></td>
+            <td id="discount-percentage"></td>
+            <td id="discounted-price"></td>
+        </tr>
+    </table>
+
+    <script>
+        $(document).ready(function() {
+            $("#member, #product").change(function() {
+                var member_id = $("#member").val();
+                var product_id = $("#product").val();
+
+                if (member_id && product_id) {
+                    $.ajax({
+                        url: "{% url 'calculate_discount' %}",
+                        data: {
+                            'member_id': member_id,
+                            'product_id': product_id
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            $("#product-name").text(response.product_name);
+                            $("#original-price").text("$" + response.original_price.toFixed(2));
+                            $("#discount-percentage").text(response.discount_percentage + "%");
+                            $("#discounted-price").text("$" + response.discounted_price.toFixed(2));
+
+                            $("#invoice-table").show();
+                        }
+                    });
+                } else {
+                    $("#invoice-table").hide();
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
